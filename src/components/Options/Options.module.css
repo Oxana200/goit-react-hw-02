@@ -1,1 +1,29 @@
-.options {}
+.options {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.button {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.button:hover {
+    transform: scale(1.1);
+}
+
+.good {
+    background-color: lightgreen;
+}
+
+.neutral {
+    background-color: lightskyblue;
+}
+
+.bad {
+    background-color: #FF6347;
+}

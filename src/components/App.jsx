@@ -1,8 +1,11 @@
+import styles from "./App.module.css"
+
 import Feedback from "./Feedback/Feedback";
 import Options from "./Options/Options";
 import Notification from "./Notification/Notification";
 
 import { useState } from "react";
+
 
 function App() {
   const [feedback, setFeedback] = useState(() => {
@@ -29,8 +32,8 @@ function App() {
   const positiveFeedback = totalFeedback > 0 ? Math.round((feedback.good / totalFeedback) * 100) : 0;
 
   return (
-    <div>
-      <h1>Sip Happens Café</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Sip Happens Café</h1>
       <p>Please leave your feedback about our service by selecting one of the options below.</p>
 
       <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} totalFeedback={totalFeedback} />
