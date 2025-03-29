@@ -1,25 +1,53 @@
-import Profile from "./Profile/Profile";
-import userData from "../userData.json";
-import FriendList from './FriendList/FriendList';
-import friends from '../friendList.json';
-import transactions from "../transactions.json";
-import TransactionHistory from "./TransactionHistory/TransactionHistory";
+import Feedback from "./Feedback/Feedback";
+import Options from "./Options/Options";
+import Notification from "./Notification/Notification";
 
-const App = () => {
+import { useState } from "react";
+
+function App() {
+  const [feedback, setFeedback] = useState(() => {
+    const savedFeedback = localStorage.getItem("feedback");
+    return savedFeedback ? JSON.parse(savedFeedback) : { good: 0, neutral: 0, bad: 0 };
+  });
+
+  const updateFeedback = (feedbackType) => {
+    setFeedback((prevFeedback) => {
+      const newFeedback = { ...prevFeedback, [feedbackType]: prevFeedback[feedbackType] + 1 };
+      localStorage.setItem("feedback", JSON.stringify(newFeedback));
+      return newFeedback;
+    });
+  };
+
+  const resetFeedback = () => {
+    const resetData = { good: 0, neutral: 0, bad: 0 };
+    setFeedback(resetData);
+    localStorage.setItem("feedback", JSON.stringify(resetData));
+  };
+
+  const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
+
+  const positiveFeedback = totalFeedback > 0 ? Math.round((feedback.good / totalFeedback) * 100) : 0;
+
   return (
-    <>
-      <Profile
-        name={userData.username}
-        tag={userData.tag}
-        location={userData.location}
-        image={userData.avatar}
-        stats={userData.stats}
-      />
-      <FriendList friends={friends} />
-      <TransactionHistory items={transactions} />
-    </>
+    <div>
+      <h1>Sip Happens Café</h1>
+      <p>Please leave your feedback about our service by selecting one of the options below.</p>
+
+      <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} totalFeedback={totalFeedback} />
+
+      {totalFeedback > 0 ? (
+        <Feedback 
+          good={feedback.good} 
+          neutral={feedback.neutral} 
+          bad={feedback.bad} 
+          total={totalFeedback} 
+          positivePercentage={positiveFeedback} 
+        />
+      ) : (
+        <Notification message="No feedback yet." />
+      )}
+    </div>
   );
-};
+}
 
 export default App;
-
